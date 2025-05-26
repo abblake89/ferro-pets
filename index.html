@@ -55,7 +55,7 @@
 <body>
   <div class="container">
     <h1>Ferro Pet</h1>
-    <img id="petImage" src="assets/Ferro.png" alt="Ferro Pet" />
+    <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro Pet" style="width: 25%; height: auto;" />
     <div class="stats">
       <p>Happiness: <span id="happiness">100</span></p>
       <p>Hunger: <span id="hunger">0</span></p>
@@ -97,16 +97,42 @@
     }
 
     function blink() {
-      petImage.src = 'assets/Ferro_blink.png';
+      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_blink.png';
       setTimeout(() => {
-        petImage.src = 'assets/Ferro.png';
-      }, 200); // Blink duration (ms)
+        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+      }, 300);
     }
 
-    // Blink every 4 seconds with 50% chance
+    function moveLeft() {
+      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png';
+      const duration = Math.random() * 2000 + 1000; // 1s to 3s
+      setTimeout(() => {
+        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+      }, duration);
+    }
+
+    function moveRight() {
+      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png';
+      const duration = Math.random() * 2000 + 1000; // 1s to 3s
+      setTimeout(() => {
+        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+      }, duration);
+    }
+
+    // Perform random behavior every 3 seconds
     setInterval(() => {
-      if (Math.random() < 0.5) blink();
-    }, 4000);
+      const chance = Math.random();
+      if (chance < 0.4) {
+        blink();
+      } else if (chance < 0.6) {
+        blink();
+        setTimeout(() => blink(), 500); // Double blink
+      } else if (chance < 0.8) {
+        moveLeft();
+      } else {
+        moveRight();
+      }
+    }, 3000);
 
     setInterval(decayStats, 5000); // Every 5 seconds
     updateStats();
