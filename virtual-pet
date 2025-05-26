@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ferro Pet</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f8f0e3;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    img {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 10px;
+    }
+    .stats {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #ffad60;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ff9137;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ferro Pet</h1>
+    <img id="petImage" src="https://i.imgur.com/OYQMa7N.png" alt="Ferro Pet" />
+    <div class="stats">
+      <p>Happiness: <span id="happiness">100</span></p>
+      <p>Hunger: <span id="hunger">0</span></p>
+    </div>
+    <button onclick="feedPet()">🍕 Feed</button>
+    <button onclick="petPet()">💖 Pet</button>
+  </div>
+
+  <script>
+    let happiness = localStorage.getItem('happiness') || 100;
+    let hunger = localStorage.getItem('hunger') || 0;
+
+    const happinessEl = document.getElementById('happiness');
+    const hungerEl = document.getElementById('hunger');
+
+    function updateStats() {
+      happinessEl.textContent = happiness;
+      hungerEl.textContent = hunger;
+      localStorage.setItem('happiness', happiness);
+      localStorage.setItem('hunger', hunger);
+    }
+
+    function feedPet() {
+      hunger = Math.max(0, hunger - 20);
+      happiness = Math.min(100, parseInt(happiness) + 10);
+      updateStats();
+    }
+
+    function petPet() {
+      happiness = Math.min(100, parseInt(happiness) + 5);
+      updateStats();
+    }
+
+    function decayStats() {
+      hunger = Math.min(100, parseInt(hunger) + 1);
+      happiness = Math.max(0, parseInt(happiness) - 1);
+      updateStats();
+    }
+
+    setInterval(decayStats, 5000); // Every 5 seconds
+    updateStats();
+  </script>
+</body>
+</html>
