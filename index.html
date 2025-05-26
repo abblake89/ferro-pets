@@ -70,6 +70,7 @@
 
     const happinessEl = document.getElementById('happiness');
     const hungerEl = document.getElementById('hunger');
+    const petImage = document.getElementById('petImage');
 
     function updateStats() {
       happinessEl.textContent = happiness;
@@ -94,6 +95,18 @@
       happiness = Math.max(0, parseInt(happiness) - 1);
       updateStats();
     }
+
+    function blink() {
+      petImage.src = 'assets/Ferro_blink.png';
+      setTimeout(() => {
+        petImage.src = 'assets/Ferro.png';
+      }, 200); // Blink duration (ms)
+    }
+
+    // Blink every 4 seconds with 50% chance
+    setInterval(() => {
+      if (Math.random() < 0.5) blink();
+    }, 4000);
 
     setInterval(decayStats, 5000); // Every 5 seconds
     updateStats();
