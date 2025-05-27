@@ -73,6 +73,8 @@
     <button onclick="feedPet()">🍕 Feed</button>
     <button onclick="petPet()">💖 Pet</button>
     <button onclick="shakeFerro()">🔄 Shake</button>
+    <button onclick="startNFCScan()">📶 Start NFC Scan</button>
+
   </div>
 
   <script>
@@ -239,6 +241,43 @@
         shakeFerro();
       }, 3000);
     });
+
+
+
+    async function startNFCScan() {
+  if ('NDEFReader' in window) {
+    try {
+      const reader = new NDEFReader();
+      await reader.scan();
+
+      reader.onreading = event => {
+        const decoder = new TextDecoder();
+        for (const record of event.message.records) {
+          if (record.recordType === 'text') {
+            const text = decoder.decode(record.data);
+            console.log('📲 NFC tag read:', text);
+
+            if (text.trim() === 'ferro_food') {
+              console.log('🍕 ferro_food tag detected — feeding pet!');
+              feedPet();
+            }
+          }
+        }
+      };
+
+      console.log("✅ NFC scan started. Tap a tag!");
+    } catch (error) {
+      console.error("❌ NFC scan failed:", error);
+    }
+  } else {
+    alert("Web NFC is not supported in this browser.");
+  }
+}
+
+
+
+
+    
 
     updateStats();
   </script>
