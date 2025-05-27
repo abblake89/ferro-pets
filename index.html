@@ -48,10 +48,10 @@
       width: 18%;
       height: auto;
       position: absolute;
-      right: 20%;
+      left: 64%;
+      transition: left 0.5s ease;
       bottom: 60px;
       display: none;
-      transition: right 0.5s ease;
     }
 
     .stats {
@@ -91,7 +91,7 @@
 <body>
   <div class="container">
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
-    <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowl.png" alt="Food Bowl" />
+    <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
   </div>
   <div class="stats">
     <p>Happiness: <span id="happiness">100</span></p>
@@ -112,6 +112,20 @@
     const happinessEl = document.getElementById('happiness');
     const hungerEl = document.getElementById('hunger');
 
+    const preloadImages = [
+      'Ferro_Eat_Open.png',
+      'Ferro_Eat_Closed.png',
+      'Ferro_Happy.png',
+      'Ferro_left.png',
+      'Ferro_right.png',
+      'Ferro_blink.png'
+    ];
+
+    preloadImages.forEach(img => {
+      const image = new Image();
+      image.src = `https://abblake89.github.io/ferro-pets/assets/${img}`;
+    });
+
     let backgroundX = 50;
     let happiness = 100;
     let hunger = 0;
@@ -131,14 +145,17 @@
       happiness = Math.min(100, happiness + 10);
       updateStats();
       petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png';
-
+      backgroundX = 100;
+      container.style.backgroundPositionX = backgroundX + '%';
       foodBowl.style.display = 'inline';
-      foodBowl.style.right = '-50%';
+      foodBowl.style.left = '120%';
       setTimeout(() => {
-        foodBowl.style.right = '20%';
+        foodBowl.style.left = '64%';
       }, 50);
 
       const chewFrames = [
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
         'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
         'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
         'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
@@ -148,18 +165,36 @@
       let frameIndex = 0;
       setTimeout(() => {
         const chewInterval = setInterval(() => {
-          petImage.src = chewFrames[frameIndex];
+          if (frameIndex === 1) {
+          foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png';
+        }
+        if (frameIndex === 3) {
+          foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl33.png';
+        }
+        if (frameIndex === 5) {
+          foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlEmpty.png';
+        }
+
+        petImage.src = chewFrames[frameIndex];
+
           frameIndex++;
           if (frameIndex >= chewFrames.length) {
             clearInterval(chewInterval);
             petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_Happy.png';
             setTimeout(() => {
-              petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
-              foodBowl.style.display = 'none';
-              isBusy = false;
+              petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png';
+              backgroundX = 50;
+              foodBowl.style.left = '120%';
+              container.style.backgroundPositionX = backgroundX + '%';
+              setTimeout(() => {
+                petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+                foodBowl.style.left = '120%';
+                setTimeout(() => { foodBowl.style.display = 'none'; }, 500);
+                isBusy = false;
+              }, 500);
             }, 1500);
           }
-        }, 400);
+        }, 800);
       }, 800);
     }
 
