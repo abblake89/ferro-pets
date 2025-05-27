@@ -72,12 +72,15 @@
     </div>
     <button onclick="feedPet()">🍕 Feed</button>
     <button onclick="petPet()">💖 Pet</button>
+    <button onclick="shakeFerro()">🔄 Shake</button>
   </div>
 
   <script>
     let happiness = localStorage.getItem('happiness') || 100;
     let hunger = localStorage.getItem('hunger') || 0;
     let isFeeding = false;
+    let isShaking = false;
+    let resetFerroImageTimeout;
 
     const happinessEl = document.getElementById('happiness');
     const hungerEl = document.getElementById('hunger');
@@ -92,7 +95,7 @@
     }
 
     function feedPet() {
-      if (isFeeding) return;
+      if (isFeeding || isShaking) return;
       isFeeding = true;
 
       hunger = Math.max(0, hunger - 20);
@@ -100,11 +103,11 @@
       updateStats();
 
       petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png';
-      setTimeout(() => {
+      clearTimeout(resetFerroImageTimeout);
+      resetFerroImageTimeout = setTimeout(() => {
         petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
       }, 4000);
 
-      // Fully end feeding after 7 seconds
       window.setTimeout(() => {
         isFeeding = false;
       }, 7000);
@@ -165,7 +168,7 @@
     }
 
     setInterval(() => {
-      if (isFeeding) return;
+      if (isFeeding || isShaking) return;
       const chance = Math.random();
       if (chance < 0.4) {
         blink();
@@ -180,6 +183,32 @@
     }, 3000);
 
     setInterval(decayStats, 5000);
+
+    function shakeFerro() {
+      if (isFeeding || isShaking) return;
+      isShaking = true;
+
+      const frames = [
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png'
+      ];
+
+      frames.forEach((frame, i) => {
+        setTimeout(() => {
+          petImage.src = frame;
+        }, i * 150);
+      });
+
+      setTimeout(() => {
+        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+        isShaking = false;
+      }, frames.length * 150);
+    }
+
     updateStats();
   </script>
 </body>
