@@ -105,7 +105,27 @@
       petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png';
       clearTimeout(resetFerroImageTimeout);
       resetFerroImageTimeout = setTimeout(() => {
-        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+        const eatFrames = [
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png'
+        ];
+
+        eatFrames.forEach((frame, i) => {
+          setTimeout(() => {
+            petImage.src = frame;
+          }, i * 500);
+        });
+
+        setTimeout(() => {
+          petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_Happy.png';
+          setTimeout(() => {
+            petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+          }, 2500);
+        }, eatFrames.length * 500);
       }, 4000);
 
       window.setTimeout(() => {
