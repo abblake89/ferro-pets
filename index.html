@@ -114,6 +114,7 @@
     <button onclick="shakeFerro()" aria-label="Shake Ferro">🔄 Shake</button>
     <button onclick="moveLeft()" aria-label="Move Left">⬅️ Left</button>
     <button onclick="moveRight()" aria-label="Move Right">➡️ Right</button>
+    <button onclick="goHome()" aria-label="Go Home">🏠 House</button>
   </div>
 
   <script>
@@ -165,19 +166,16 @@
       foodBowl.style.left = '120%';
       setTimeout(() => {
         foodBowl.style.left = '64%';
-      }, 50);
+        const chewFrames = [
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
+          'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png'
+        ];
 
-      const chewFrames = [
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Open.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_Eat_Closed.png'
-      ];
-
-      let frameIndex = 0;
-      setTimeout(() => {
+        let frameIndex = 0;
         const chewInterval = setInterval(() => {
           if (frameIndex === 1) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png';
           if (frameIndex === 3) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl33.png';
@@ -192,21 +190,21 @@
             setTimeout(() => {
               petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png';
               backgroundX = 50;
-              foodBowl.style.left = '120%';
               container.style.backgroundPositionX = backgroundX + '%';
+              foodBowl.style.left = '120%';
               setTimeout(() => {
                 petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
                 foodBowl.style.left = '120%';
                 setTimeout(() => {
                   foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png';
                   foodBowl.style.display = 'none';
+                  isBusy = false;
                 }, 500);
-                isBusy = false;
               }, 500);
             }, 1500);
           }
         }, 800);
-      }, 800);
+      }, 50);
     }
 
     function shakeFerro() {
@@ -227,6 +225,41 @@
         petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
         isBusy = false;
       }, frames.length * 120);
+    }
+
+    function goHome() {
+      if (isBusy) return;
+      isBusy = true;
+      backgroundX = 50;
+      container.style.backgroundPositionX = backgroundX + '%';
+      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+      setTimeout(() => {
+        isBusy = false;
+      }, 500);
+    }
+
+    function startGame() {
+      startButton.style.display = 'none';
+      stats.style.display = 'block';
+      buttonControls.style.display = 'block';
+      startNFCScan();
+      updateStats();
+      setInterval(() => {
+        if (isBusy) return;
+        const chance = Math.random();
+        if (chance < 0.4) blink();
+        else if (chance < 0.7) moveLeft();
+        else moveRight();
+      }, 4000);
+      setInterval(decayStats, 5000);
+    }
+
+    function blink() {
+      if (isBusy) return;
+      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_blink.png';
+      setTimeout(() => {
+        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+      }, 300);
     }
 
     function moveLeft() {
@@ -251,14 +284,6 @@
         petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
         isBusy = false;
       }, 500);
-    }
-
-    function blink() {
-      if (isBusy) return;
-      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_blink.png';
-      setTimeout(() => {
-        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
-      }, 300);
     }
 
     function decayStats() {
@@ -291,27 +316,6 @@
         alert("Web NFC is not supported in this browser.");
       }
     }
-
-    function startGame() {
-      startButton.style.display = 'none';
-      stats.style.display = 'block';
-      buttonControls.style.display = 'block';
-      startNFCScan();
-      updateStats();
-      setInterval(() => {
-        if (isBusy) return;
-        const chance = Math.random();
-        if (chance < 0.4) blink();
-        else if (chance < 0.7) moveLeft();
-        else moveRight();
-      }, 4000);
-      setInterval(decayStats, 5000);
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') moveLeft();
-      if (e.key === 'ArrowRight') moveRight();
-    });
   </script>
 </body>
 </html>
