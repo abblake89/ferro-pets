@@ -189,7 +189,10 @@
               setTimeout(() => {
                 petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
                 foodBowl.style.left = '120%';
-                setTimeout(() => { foodBowl.style.display = 'none'; }, 500);
+                setTimeout(() => {
+                  foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png';
+                  foodBowl.style.display = 'none';
+                }, 500);
                 isBusy = false;
               }, 500);
             }, 1500);
