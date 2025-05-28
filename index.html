@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ferro Pet</title>
-  <style>
+  <style> 
     body {
       font-family: 'Arial', sans-serif;
       background: #f8f0e3;
@@ -58,11 +58,13 @@
       font-size: 16px;
       margin: 10px 0;
       text-align: center;
+      display: none;
     }
 
     .buttons {
       margin-top: 15px;
       text-align: center;
+      display: none;
     }
 
     button {
@@ -80,6 +82,15 @@
       background: #ff9137;
     }
 
+    #startButton {
+      margin-top: 20px;
+      background: #00b3b3;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
     @media (max-width: 400px) {
       button {
         font-size: 14px;
@@ -92,15 +103,15 @@
   <div class="container">
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
     <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
+    <button id="startButton" onclick="startGame()">Play</button>
   </div>
-  <div class="stats">
+  <div class="stats" id="stats">
     <p>Happiness: <span id="happiness">100</span></p>
     <p>Hunger: <span id="hunger">0</span></p>
   </div>
-  <div class="buttons">
+  <div class="buttons" id="buttonControls">
     <button onclick="feedPet()" aria-label="Feed Ferro">🍕 Feed</button>
     <button onclick="shakeFerro()" aria-label="Shake Ferro">🔄 Shake</button>
-    <button onclick="startNFCScan()" aria-label="Start NFC Scan">📶 Start NFC Scan</button>
     <button onclick="moveLeft()" aria-label="Move Left">⬅️ Left</button>
     <button onclick="moveRight()" aria-label="Move Right">➡️ Right</button>
   </div>
@@ -111,6 +122,9 @@
     const foodBowl = document.getElementById('foodBowl');
     const happinessEl = document.getElementById('happiness');
     const hungerEl = document.getElementById('hunger');
+    const startButton = document.getElementById('startButton');
+    const stats = document.getElementById('stats');
+    const buttonControls = document.getElementById('buttonControls');
 
     const preloadImages = [
       'Ferro_Eat_Open.png',
@@ -165,19 +179,13 @@
       let frameIndex = 0;
       setTimeout(() => {
         const chewInterval = setInterval(() => {
-          if (frameIndex === 1) {
-          foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png';
-        }
-        if (frameIndex === 3) {
-          foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl33.png';
-        }
-        if (frameIndex === 5) {
-          foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlEmpty.png';
-        }
+          if (frameIndex === 1) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png';
+          if (frameIndex === 3) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl33.png';
+          if (frameIndex === 5) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlEmpty.png';
 
-        petImage.src = chewFrames[frameIndex];
-
+          petImage.src = chewFrames[frameIndex];
           frameIndex++;
+
           if (frameIndex >= chewFrames.length) {
             clearInterval(chewInterval);
             petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_Happy.png';
@@ -201,30 +209,24 @@
       }, 800);
     }
 
-    function startNFCScan() {
+    function shakeFerro() {
       if (isBusy) return;
-      if ('NDEFReader' in window) {
-        try {
-          const reader = new NDEFReader();
-          reader.scan().then(() => {
-            reader.onreading = event => {
-              const decoder = new TextDecoder();
-              for (const record of event.message.records) {
-                if (record.recordType === 'text') {
-                  const text = decoder.decode(record.data);
-                  if (text.trim() === 'ferro_food') {
-                    feedPet();
-                  }
-                }
-              }
-            };
-          });
-        } catch (error) {
-          alert("NFC scan failed: " + error);
-        }
-      } else {
-        alert("Web NFC is not supported in this browser.");
-      }
+      isBusy = true;
+      const frames = [
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
+        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png'
+      ];
+      frames.forEach((frame, i) => {
+        setTimeout(() => {
+          petImage.src = frame;
+        }, i * 120);
+      });
+      setTimeout(() => {
+        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+        isBusy = false;
+      }, frames.length * 120);
     }
 
     function moveLeft() {
@@ -251,26 +253,6 @@
       }, 500);
     }
 
-    function shakeFerro() {
-      if (isBusy) return;
-      isBusy = true;
-      const frames = [
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png'
-      ];
-      frames.forEach((frame, i) => {
-        setTimeout(() => {
-          petImage.src = frame;
-        }, i * 120);
-      });
-      setTimeout(() => {
-        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
-        isBusy = false;
-      }, frames.length * 120);
-    }
-
     function blink() {
       if (isBusy) return;
       petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_blink.png';
@@ -285,22 +267,51 @@
       updateStats();
     }
 
-    setInterval(() => {
-      if (isBusy) return;
-      const chance = Math.random();
-      if (chance < 0.4) blink();
-      else if (chance < 0.7) moveLeft();
-      else moveRight();
-    }, 4000);
+    function startNFCScan() {
+      if ('NDEFReader' in window) {
+        try {
+          const reader = new NDEFReader();
+          reader.scan().then(() => {
+            reader.onreading = event => {
+              const decoder = new TextDecoder();
+              for (const record of event.message.records) {
+                if (record.recordType === 'text') {
+                  const text = decoder.decode(record.data);
+                  if (text.trim() === 'ferro_food') {
+                    feedPet();
+                  }
+                }
+              }
+            };
+          });
+        } catch (error) {
+          alert("NFC scan failed: " + error);
+        }
+      } else {
+        alert("Web NFC is not supported in this browser.");
+      }
+    }
 
-    setInterval(decayStats, 5000);
+    function startGame() {
+      startButton.style.display = 'none';
+      stats.style.display = 'block';
+      buttonControls.style.display = 'block';
+      startNFCScan();
+      updateStats();
+      setInterval(() => {
+        if (isBusy) return;
+        const chance = Math.random();
+        if (chance < 0.4) blink();
+        else if (chance < 0.7) moveLeft();
+        else moveRight();
+      }, 4000);
+      setInterval(decayStats, 5000);
+    }
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') moveLeft();
       if (e.key === 'ArrowRight') moveRight();
     });
-
-    updateStats();
   </script>
 </body>
 </html>
