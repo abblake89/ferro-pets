@@ -62,7 +62,16 @@
       position: absolute;
       left: 71%;
       transition: left 0.5s ease;
-      bottom: 80px;}
+      bottom: 80px;
+    }
+
+    #ferroBarrel {
+      position: absolute;
+      display: none;
+      width: 20%;
+      bottom: 80px;
+      left: calc(10% + 30px);
+    }
 
     .stats {
       font-size: 16px;
@@ -114,6 +123,7 @@
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
     <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
     <img id="feederMachine" src="https://abblake89.github.io/ferro-pets/assets/FerroFeeder.png" alt="Feeder Machine" style="display: none;" />
+    <img id="ferroBarrel" src="https://abblake89.github.io/ferro-pets/assets/FerroBarrel.png" alt="Ferro Barrel" />
     <button id="startButton" onclick="startGame()">Play</button>
   </div>
   <div class="stats" id="stats">
@@ -134,6 +144,7 @@
     const container = document.querySelector('.container');
     const foodBowl = document.getElementById('foodBowl');
     const feeder = document.getElementById('feederMachine');
+    const barrel = document.getElementById('ferroBarrel');
     const happinessEl = document.getElementById('happiness');
     const hungerEl = document.getElementById('hunger');
     const startButton = document.getElementById('startButton');
@@ -148,7 +159,8 @@
       'Ferro_right.png',
       'Ferro_blink.png',
       'Ferro_Gold.png',
-      'FerroFeeder.png'
+      'FerroFeeder.png',
+      'FerroBarrel.png'
     ];
 
     preloadImages.forEach(img => {
@@ -180,72 +192,27 @@
       buttonControls.style.display = 'block';
       petImage.style.width = ferroSize + '%';
       updateStats();
+      setupNFC();
     }
 
-    function feedPet() {
-      if (isBusy) return;
-      isBusy = true;
-      hunger = Math.max(0, hunger - 20);
-      happiness = Math.min(100, happiness + 10);
-      updateStats();
-      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png';
-      backgroundX = 100;
-      container.style.backgroundPositionX = backgroundX + '%';
-      foodBowl.style.display = 'inline';
-      feeder.style.display = 'inline';
-      foodBowl.style.left = '120%';
-      feeder.style.left = '132%';
-      setTimeout(() => {
-        foodBowl.style.left = 'calc(64% - 15px)';
-        feeder.style.left = 'calc(76% - 34px)';
-        const chewFrames = [
-          'Ferro_Eat_Open.png',
-          'Ferro_Eat_Closed.png',
-          'Ferro_Eat_Open.png',
-          'Ferro_Eat_Closed.png',
-          'Ferro_Eat_Open.png',
-          'Ferro_Eat_Closed.png'
-        ];
-
-        let frameIndex = 0;
-        const chewInterval = setInterval(() => {
-          if (frameIndex === 1) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png';
-          if (frameIndex === 3) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl33.png';
-          if (frameIndex === 5) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlEmpty.png';
-
-          petImage.src = `https://abblake89.github.io/ferro-pets/assets/${chewFrames[frameIndex]}`;
-          if (frameIndex % 2 === 1) {
-            ferroSize = Math.min(100, ferroSize + 1);
-            petImage.style.width = ferroSize + '%';
-            updateStats();
-          }
-          frameIndex++;
-
-          if (frameIndex >= chewFrames.length) {
-            clearInterval(chewInterval);
-            petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_Happy.png';
-            setTimeout(() => {
-              petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png';
-              backgroundX = 50;
-              container.style.backgroundPositionX = backgroundX + '%';
-              foodBowl.style.left = '120%';
-              feeder.style.left = '132%';
-              setTimeout(() => {
-                petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
-                petImage.style.width = ferroSize + '%';
-                foodBowl.style.left = '120%';
-                feeder.style.left = '132%';
-                setTimeout(() => {
-                  foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png';
-                  foodBowl.style.display = 'none';
-                  feeder.style.display = 'none';
-                  isBusy = false;
-                }, 500);
-              }, 500);
-            }, 1500);
-          }
-        }, 800);
-      }, 50);
+    function setupNFC() {
+      if ('NDEFReader' in window) {
+        const ndef = new NDEFReader();
+        ndef.scan().then(() => {
+          ndef.onreading = event => {
+            const message = event.message;
+            for (const record of message.records) {
+              const textDecoder = new TextDecoder();
+              const data = textDecoder.decode(record.data);
+              if (data === 'FerroBarrel') {
+                barrel.style.display = 'block';
+              }
+            }
+          };
+        }).catch(error => {
+          console.error("NFC Scan error:", error);
+        });
+      }
     }
   </script>
 </body>
