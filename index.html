@@ -45,6 +45,7 @@
     }
 
     #foodBowl {
+      z-index: 1;
       width: 18%;
       height: auto;
       position: absolute;
@@ -55,12 +56,13 @@
     }
 
     #feederMachine {
+      z-index: 0;
       width: 35%;
       height: auto;
       position: absolute;
-      left: 76%;
+      left: 71%;
       transition: left 0.5s ease;
-      bottom: 90px;}
+      bottom: 80px;}
 
     .stats {
       font-size: 16px;
@@ -187,7 +189,7 @@
       feeder.style.left = '132%';
       setTimeout(() => {
         foodBowl.style.left = 'calc(64% - 15px)';
-        feeder.style.left = 'calc(76% - 35px)';
+        feeder.style.left = 'calc(76% - 45px)';
         const chewFrames = [
           'Ferro_Eat_Open.png',
           'Ferro_Eat_Closed.png',
