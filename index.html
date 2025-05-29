@@ -37,7 +37,7 @@
     }
 
     #petImage {
-      width: 25%;
+      width: 10%;
       height: auto;
       position: absolute;
       bottom: 80px;
@@ -119,6 +119,7 @@
   <div class="stats" id="stats">
     <p>Happiness: <span id="happiness">100</span></p>
     <p>Hunger: <span id="hunger">0</span></p>
+    <p>Ferro Size: <span id="ferroSizeDisplay">10</span>%</p>
   </div>
   <div class="buttons" id="buttonControls">
     <button onclick="feedPet()" aria-label="Feed Ferro">🍕 Feed</button>
@@ -156,8 +157,9 @@
     });
 
     let backgroundX = 50;
-    let happiness = 100;
-    let hunger = 0;
+    let happiness = parseInt(localStorage.getItem('happiness')) || 100;
+    let hunger = parseInt(localStorage.getItem('hunger')) || 0;
+    let ferroSize = parseInt(localStorage.getItem('ferroSize')) || 10;
     let isBusy = false;
 
     function updateStats() {
@@ -165,12 +167,18 @@
       hunger = Math.min(100, Math.max(0, hunger));
       happinessEl.textContent = happiness;
       hungerEl.textContent = hunger;
+      document.getElementById('ferroSizeDisplay').textContent = ferroSize;
+
+      localStorage.setItem('happiness', happiness);
+      localStorage.setItem('hunger', hunger);
+      localStorage.setItem('ferroSize', ferroSize);
     }
 
     function startGame() {
       startButton.style.display = 'none';
       stats.style.display = 'block';
       buttonControls.style.display = 'block';
+      petImage.style.width = ferroSize + '%';
       updateStats();
     }
 
@@ -206,6 +214,11 @@
           if (frameIndex === 5) foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlEmpty.png';
 
           petImage.src = `https://abblake89.github.io/ferro-pets/assets/${chewFrames[frameIndex]}`;
+          if (frameIndex % 2 === 1) {
+            ferroSize = Math.min(100, ferroSize + 1);
+            petImage.style.width = ferroSize + '%';
+            updateStats();
+          }
           frameIndex++;
 
           if (frameIndex >= chewFrames.length) {
@@ -219,6 +232,7 @@
               feeder.style.left = '132%';
               setTimeout(() => {
                 petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+                petImage.style.width = ferroSize + '%';
                 foodBowl.style.left = '120%';
                 feeder.style.left = '132%';
                 setTimeout(() => {
