@@ -352,8 +352,8 @@
               }
 			  else if (text === 'FerroBarrel') {
 				const ferroLeft = petImage.offsetLeft;
-				const barrelLeft = ferroLeft - 100;
-				barrelImage.style.left = `${barrelLeft}px`;
+				const barrelRight = ferroLeft - 20;
+				barrelImage.style.right = `${barrelRight}px`;
 				barrelImage.style.display = 'inline';
 barrelImage.onclick = refillFeeder;
 				}
