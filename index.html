@@ -114,7 +114,7 @@
   <div class="container">
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
     <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
-    <img id="feederMachine" src="https://abblake89.github.io/ferro-pets/assets/FerroFeeder.png" alt="Feeder Machine" style="display: none;" />
+    <img id="feederMachine" src="https://abblake89.github.io/ferro-pets/assets/FerroFeederFull.png" alt="Feeder Machine" style="display: none;" />
     <button id="startButton" onclick="startGame()">Play</button>
   </div>
   <div class="stats" id="stats">
@@ -150,7 +150,11 @@
       'Ferro_right.png',
       'Ferro_blink.png',
       'Ferro_Gold.png',
-      'FerroFeeder.png'
+      'FerroFeeder.png',
+      'FerroFeederFull.png',
+      'FerroFeeder66.png',
+      'FerroFeeder33.png',
+	  'FerroFeederEmpty.png'
     ];
 
     preloadImages.forEach(img => {
@@ -163,6 +167,7 @@
     let hunger = 0;
     let isBusy = false;
     let ferroSize = 10;
+    let feederUsesLeft = 2;
 
     function updateStats() {
       happiness = Math.min(100, Math.max(0, happiness));
@@ -176,6 +181,7 @@
       startButton.style.display = 'none';
       stats.style.display = 'block';
       buttonControls.style.display = 'block';
+	  startNFCScan();
       updateStats();
     }
 
@@ -212,8 +218,21 @@
     }
 
     function feedPet() {
-      if (isBusy) return;
+      if (isBusy || feederUsesLeft <= 0) return;
       isBusy = true;
+      feederUsesLeft--;
+
+      if (feederUsesLeft >= 11) {
+        feeder.src = 'https://abblake89.github.io/ferro-pets/assets/FerroFeederFull.png';
+      } else if (feederUsesLeft >= 6) {
+        feeder.src = 'https://abblake89.github.io/ferro-pets/assets/FerroFeeder66.png';
+      } else if (feederUsesLeft >= 1) {
+        feeder.src = 'https://abblake89.github.io/ferro-pets/assets/FerroFeeder33.png';
+      } else {
+        feeder.src = 'https://abblake89.github.io/ferro-pets/assets/FerroFeederEmpty.png';
+      }
+	  
+
       hunger = Math.max(0, hunger - 20);
       happiness = Math.min(100, happiness + 10);
       updateStats();
@@ -296,6 +315,37 @@
         isBusy = false;
       }, frames.length * 120);
     }
+	
+	function startNFCScan() {
+  if ('NDEFReader' in window) {
+    try {
+      const reader = new NDEFReader();
+      reader.scan().then(() => {
+        reader.onreading = event => {
+          const decoder = new TextDecoder();
+          for (const record of event.message.records) {
+            if (record.recordType === 'text') {
+              const text = decoder.decode(record.data);
+              if (text.trim() === 'ferro_food') {
+                feedPet();
+              }
+            }
+          }
+        };
+      });
+    } catch (error) {
+      alert("NFC scan failed: " + error);
+    }
+  } else {
+    alert("Web NFC is not supported in this browser.");
+  }
+}
+
+	
+	
+	
+	
+	
   </script>
 </body>
 </html>
