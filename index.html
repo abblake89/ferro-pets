@@ -457,6 +457,12 @@ function goToLitterbox() {
       
       setTimeout(() => {
         petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png';
+		
+		ferroSize = Math.max(5, ferroSize - 6);
+		petImage.style.width = ferroSize + '%';
+		updateStats();
+		
+		
         backgroundX = 50;
         container.style.backgroundPositionX = backgroundX + '%';
         box.style.left = '-20%';
