@@ -344,6 +344,7 @@
 				const barrelLeft = ferroLeft - 100;
 				barrelImage.style.left = `${barrelLeft}px`;
 				barrelImage.style.display = 'inline';
+				barrelImage.onclick = refillFeeder;
 				}
             }
           }
@@ -355,6 +356,39 @@
   } else {
     alert("Web NFC is not supported in this browser.");
   }
+}
+
+
+
+function refillFeeder() {
+  if (isBusy) return;
+  isBusy = true;
+
+  petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png';
+  backgroundX = 100;
+  container.style.backgroundPositionX = backgroundX + '%';
+  foodBowl.style.display = 'inline';
+  feeder.style.display = 'inline';
+  foodBowl.style.left = '120%';
+  feeder.style.left = '132%';
+  setTimeout(() => {
+    foodBowl.style.left = 'calc(64% - 15px)';
+    feeder.style.left = 'calc(76% - 34px)';
+
+    // Move barrel above feeder
+    const feederLeft = feeder.offsetLeft;
+    barrelImage.style.left = `${feederLeft}px`;
+    barrelImage.style.bottom = '120px';
+    barrelImage.style.transform = 'rotate(90deg)';
+
+    setTimeout(() => {
+      feederUsesLeft = 15;
+      barrelImage.style.display = 'none';
+      barrelImage.style.transform = 'none';
+      barrelImage.style.bottom = '80px';
+      isBusy = false;
+    }, 1500);
+  }, 50);
 }
 
 	
