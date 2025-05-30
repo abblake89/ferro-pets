@@ -55,6 +55,44 @@
       display: none;
     }
 
+
+    #foodBowl66 {
+      z-index: 1;
+      width: 18%;
+      height: auto;
+      position: absolute;
+      left: 64%;
+      transition: left 0.5s ease;
+      bottom: 60px;
+      display: none;
+    }
+
+    #foodBowl33 {
+      z-index: 1;
+      width: 18%;
+      height: auto;
+      position: absolute;
+      left: 64%;
+      transition: left 0.5s ease;
+      bottom: 60px;
+      display: none;
+    }
+
+    #foodBowlEmpty {
+      z-index: 1;
+      width: 18%;
+      height: auto;
+      position: absolute;
+      left: 64%;
+      transition: left 0.5s ease;
+      bottom: 60px;
+      display: none;
+    }
+	
+
+
+    
+
     #feederMachine {
       z-index: 0;
       width: 32%;
@@ -114,7 +152,10 @@
   <div class="container">
 	<img id="litterbox" src="https://abblake89.github.io/ferro-pets/assets/Litterbox.png" alt="Litterbox" style="position: absolute; left: 0; bottom: 65px; width: 20%; height: auto; display: none;" />
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
-    <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
+    <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowl.png" alt="Food Bowl" />
+    <img id="foodBowl66" src="https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png" alt="Food Bowl 66" />
+    <img id="foodBowl33" src="https://abblake89.github.io/ferro-pets/assets/FoodBowl33.png" alt="Food Bowl 33" />
+    <img id="foodBowlEmpty" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlEmpty.png" alt="Food Bowl Empty" />
     <img id="feederMachine" src="https://abblake89.github.io/ferro-pets/assets/FerroFeederFull.png" alt="Feeder Machine" style="display: none;" />
 		<img id="ferroBarrel" src="https://abblake89.github.io/ferro-pets/assets/FerroBarrel.png" alt="Ferro Barrel" style="display: none; position: absolute; bottom: 80px; width: 20%; height: auto; transition: transform 0.5s ease;" />
 
@@ -262,12 +303,30 @@
         let cycleCount = 0;
         function chewCycle() {
           if (cycleCount >= 3) {
+			
             showHappyFace();
             return;
           }
+ 
+		  
           petImage.src = `https://abblake89.github.io/ferro-pets/assets/${chewFrames[0]}`;
           setTimeout(() => {
             petImage.src = `https://abblake89.github.io/ferro-pets/assets/${chewFrames[1]}`;
+
+          if (cycleCount >= 2) {
+			foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlEmpty.png';  
+          }
+            
+		  else if (cycleCount >= 1) {
+			foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl33.png';
+          }
+		  else if (cycleCount >= 0) {
+			foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png';
+          }
+
+
+
+            
             ferroSize = Math.min(100, ferroSize + 2);
             petImage.style.width = ferroSize + '%';
             updateStats();
@@ -448,7 +507,7 @@ function goToLitterbox() {
 
   setTimeout(() => {
     petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
-    isBusy = false;
+    //isBusy = false;
   }, sequence.length * 150);
 
 
