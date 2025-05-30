@@ -115,7 +115,8 @@
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
     <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
     <img id="feederMachine" src="https://abblake89.github.io/ferro-pets/assets/FerroFeederFull.png" alt="Feeder Machine" style="display: none;" />
-	<img id="ferroBarrel" src="https://abblake89.github.io/ferro-pets/assets/FerroBarrel.png" alt="Ferro Barrel" style="display: none; position: absolute; bottom: 80px;" />
+		<img id="ferroBarrel" src="https://abblake89.github.io/ferro-pets/assets/FerroBarrel.png" alt="Ferro Barrel" style="display: none; position: absolute; bottom: 80px; width: 20%; height: auto;" />
+
 
     <button id="startButton" onclick="startGame()">Play</button>
   </div>
@@ -169,7 +170,7 @@
     let happiness = 100;
     let hunger = 0;
     let isBusy = false;
-    let ferroSize = 10;
+    let ferroSize = 25;
     let feederUsesLeft = 15;
 
     function updateStats() {
@@ -340,7 +341,7 @@
               }
 			  else if (text === 'FerroBarrel') {
 				const ferroLeft = petImage.offsetLeft;
-				const barrelLeft = ferroLeft - 30;
+				const barrelLeft = ferroLeft - 100;
 				barrelImage.style.left = `${barrelLeft}px`;
 				barrelImage.style.display = 'inline';
 				}
