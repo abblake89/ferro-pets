@@ -249,7 +249,7 @@
 
     function blink() {
       if (isBusy) return;
-      updateFerroImage(Blink);
+      updateFerroImage('Blink');
       setTimeout(() => {
         updateFerroImage();
       }, 300);
@@ -258,7 +258,7 @@
     function moveLeft() {
       if (isBusy) return;
       isBusy = true;
-      updateFerroImage(Left);
+      updateFerroImage('Left');
       backgroundX = Math.max(0, backgroundX - 15);
       container.style.backgroundPositionX = backgroundX + '%';
       setTimeout(() => {
@@ -270,7 +270,7 @@
     function moveRight() {
       if (isBusy) return;
       isBusy = true;
-      updateFerroImage(Right);
+      updateFerroImage('Right');
       backgroundX = Math.min(100, backgroundX + 15);
       container.style.backgroundPositionX = backgroundX + '%';
       setTimeout(() => {
@@ -298,7 +298,7 @@
       hunger = Math.max(0, hunger - 20);
       happiness = Math.min(100, happiness + 10);
       updateStats();
-      updateFerroImage(Right);
+      updateFerroImage('Right');
       backgroundX = 100;
       container.style.backgroundPositionX = backgroundX + '%';
       foodBowl.style.display = 'inline';
@@ -351,7 +351,7 @@
         }
 
         function showHappyFace() {
-          updateFerroImage(Happy);
+          updateFerroImage('Happy');
           setTimeout(() => {
             resetAfterFeed();
           }, 1000);
@@ -396,7 +396,7 @@
 	
 	
 	function resetAfterFeed() {
-          updateFerroImage(Left);
+          updateFerroImage('Left');
           backgroundX = 50;
           container.style.backgroundPositionX = backgroundX + '%';
           foodBowl.style.left = '120%';
@@ -458,7 +458,7 @@
   if (isBusy) return;
   isBusy = true;
 
-  updateFerroImage(Right);
+  updateFerroImage('Right');
   backgroundX = 100;
   container.style.backgroundPositionX = backgroundX + '%';
   foodBowl.style.display = 'inline';
@@ -497,7 +497,7 @@ function goToLitterbox() {
   if (isBusy) return;
   isBusy = true;
 
-  updateFerroImage(Left);
+  updateFerroImage('Left');
   backgroundX = 0;
   container.style.backgroundPositionX = backgroundX + '%';
   const box = document.getElementById('litterbox');
@@ -537,7 +537,7 @@ function goToLitterbox() {
 
       
       setTimeout(() => {
-        updateFerroImage(Right);
+        updateFerroImage('Right');
 		
 		ferroSize = Math.max(1, ferroSize - 6);
 		petImage.style.width = ferroSize + '%';
