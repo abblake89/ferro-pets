@@ -173,7 +173,7 @@
     let hunger = 0;
     let isBusy = false;
     let ferroSize = 25;
-    let feederUsesLeft = 15;
+    let feederUsesLeft = 9;
 
     function updateStats() {
       happiness = Math.min(100, Math.max(0, happiness));
@@ -230,9 +230,9 @@
       isBusy = true;
       feederUsesLeft--;
 
-      if (feederUsesLeft >= 11) {
+      if (feederUsesLeft >= 7) {
         feeder.src = 'https://abblake89.github.io/ferro-pets/assets/FerroFeederFull.png';
-      } else if (feederUsesLeft >= 6) {
+      } else if (feederUsesLeft >= 4) {
         feeder.src = 'https://abblake89.github.io/ferro-pets/assets/FerroFeeder66.png';
       } else if (feederUsesLeft >= 1) {
         feeder.src = 'https://abblake89.github.io/ferro-pets/assets/FerroFeeder33.png';
@@ -268,7 +268,7 @@
           petImage.src = `https://abblake89.github.io/ferro-pets/assets/${chewFrames[0]}`;
           setTimeout(() => {
             petImage.src = `https://abblake89.github.io/ferro-pets/assets/${chewFrames[1]}`;
-            ferroSize = Math.min(100, ferroSize + 1);
+            ferroSize = Math.min(100, ferroSize + 2);
             petImage.style.width = ferroSize + '%';
             updateStats();
             cycleCount++;
