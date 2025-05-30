@@ -37,7 +37,7 @@
     }
 
     #petImage {
-      width: 10%;
+      width: 25%;
       height: auto;
       position: absolute;
       bottom: 80px;
@@ -115,7 +115,7 @@
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
     <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
     <img id="feederMachine" src="https://abblake89.github.io/ferro-pets/assets/FerroFeederFull.png" alt="Feeder Machine" style="display: none;" />
-		<img id="ferroBarrel" src="https://abblake89.github.io/ferro-pets/assets/FerroBarrel.png" alt="Ferro Barrel" style="display: none; position: absolute; bottom: 80px; width: 20%; height: auto;" />
+		<img id="ferroBarrel" src="https://abblake89.github.io/ferro-pets/assets/FerroBarrel.png" alt="Ferro Barrel" style="display: none; position: absolute; bottom: 80px; width: 20%; height: auto; transition: transform 0.5s ease;" />
 
 
     <button id="startButton" onclick="startGame()">Play</button>
@@ -182,6 +182,11 @@
     }
 
     function startGame() {
+  const ferroLeft = petImage.offsetLeft;
+  const barrelLeft = ferroLeft - 100;
+  barrelImage.style.left = `${barrelLeft}px`;
+  barrelImage.style.display = 'inline';
+  barrelImage.onclick = refillFeeder;
       startButton.style.display = 'none';
       stats.style.display = 'block';
       buttonControls.style.display = 'block';
@@ -279,22 +284,7 @@
           }, 1500);
         }
 
-        function resetAfterFeed() {
-          petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png';
-          backgroundX = 50;
-          container.style.backgroundPositionX = backgroundX + '%';
-          foodBowl.style.left = '120%';
-          feeder.style.left = '132%';
-          setTimeout(() => {
-            petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
-            setTimeout(() => {
-              foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png';
-              foodBowl.style.display = 'none';
-              feeder.style.display = 'none';
-              isBusy = false;
-            }, 500);
-          }, 500);
-        }
+        
 
         chewCycle();
       }, 50);
@@ -322,7 +312,22 @@
 	
 	
 	
-	
+	function resetAfterFeed() {
+          petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png';
+          backgroundX = 50;
+          container.style.backgroundPositionX = backgroundX + '%';
+          foodBowl.style.left = '120%';
+          feeder.style.left = '132%';
+          setTimeout(() => {
+            petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+            setTimeout(() => {
+              foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png';
+              foodBowl.style.display = 'none';
+              feeder.style.display = 'none';
+              isBusy = false;
+            }, 500);
+          }, 500);
+        }
 	
 	
 	
@@ -344,7 +349,7 @@
 				const barrelLeft = ferroLeft - 100;
 				barrelImage.style.left = `${barrelLeft}px`;
 				barrelImage.style.display = 'inline';
-				barrelImage.onclick = refillFeeder;
+barrelImage.onclick = refillFeeder;
 				}
             }
           }
@@ -358,9 +363,12 @@
   }
 }
 
-
-
-function refillFeeder() {
+	
+	
+	
+	
+	
+  function refillFeeder() {
   if (isBusy) return;
   isBusy = true;
 
@@ -376,26 +384,29 @@ function refillFeeder() {
     feeder.style.left = 'calc(76% - 34px)';
 
     // Move barrel above feeder
-    const feederLeft = feeder.offsetLeft;
+    const feederLeft = feeder.offsetLeft-300;
     barrelImage.style.left = `${feederLeft}px`;
-    barrelImage.style.bottom = '120px';
+    barrelImage.style.bottom = '227px';
+    setTimeout(() => {
     barrelImage.style.transform = 'rotate(90deg)';
+      barrelImage.src = 'https://abblake89.github.io/ferro-pets/assets/FerroBarrelPouring.png';
+      }, 500);
 
     setTimeout(() => {
       feederUsesLeft = 15;
-      barrelImage.style.display = 'inline';
+      barrelImage.style.display = 'none';
+      barrelImage.src = 'https://abblake89.github.io/ferro-pets/assets/FerroBarrel.png';
       barrelImage.style.transform = 'none';
       barrelImage.style.bottom = '80px';
       isBusy = false;
-    }, 1500);
+    }, 3000);
   }, 50);
+    setTimeout(() => {
+            resetAfterFeed();
+          }, 3000);
+    
 }
 
-	
-	
-	
-	
-	
-  </script>
+</script>
 </body>
 </html>
