@@ -112,6 +112,7 @@
 </head>
 <body>
   <div class="container">
+	<img id="litterbox" src="https://abblake89.github.io/ferro-pets/assets/Litterbox.png" alt="Litterbox" style="position: absolute; left: 0; bottom: 80px; width: 20%; height: auto; display: none;" />
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
     <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png" alt="Food Bowl" />
     <img id="feederMachine" src="https://abblake89.github.io/ferro-pets/assets/FerroFeederFull.png" alt="Feeder Machine" style="display: none;" />
@@ -131,6 +132,7 @@
     <button onclick="moveLeft()" aria-label="Move Left">⬅️ Left</button>
     <button onclick="moveRight()" aria-label="Move Right">➡️ Right</button>
     <button onclick="goHome()" aria-label="Go Home">🏠 House</button>
+	<button id="litterboxButton" onclick="goToLitterbox()">🪠 Litterbox</button>
   </div>
 
   <script>
@@ -288,24 +290,33 @@
     }
 
     function shakeFerro() {
-      if (isBusy) return;
-      isBusy = true;
-      const frames = [
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png',
-        'https://abblake89.github.io/ferro-pets/assets/Ferro_right.png'
-      ];
-      frames.forEach((frame, i) => {
-        setTimeout(() => {
-          petImage.src = frame;
-        }, i * 120);
-      });
-      setTimeout(() => {
-        petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
-        isBusy = false;
-      }, frames.length * 120);
-    }
+  if (isBusy) return;
+  isBusy = true;
+
+  const sequence = [
+    { direction: 'left', delta: -4 },
+    { direction: 'right', delta: 4 },
+    { direction: 'left', delta: -4 },
+    { direction: 'right', delta: 4 },
+    { direction: 'left', delta: -4 },
+    { direction: 'right', delta: 4 },
+  ];
+
+  sequence.forEach((step, i) => {
+    setTimeout(() => {
+      petImage.src = `https://abblake89.github.io/ferro-pets/assets/Ferro_${step.direction}.png`;
+      backgroundX = Math.min(100, Math.max(0, backgroundX + step.delta));
+      container.style.backgroundPositionX = backgroundX + '%';
+    }, i * 150);
+  });
+
+  setTimeout(() => {
+    petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+    isBusy = false;
+  }, sequence.length * 150);
+}
+      
+  
 	
 	
 	
@@ -319,8 +330,7 @@
             petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
             setTimeout(() => {
               foodBowl.src = 'https://abblake89.github.io/ferro-pets/assets/FoodBowlFull.png';
-              foodBowl.style.display = 'none';
-              feeder.style.display = 'none';
+              litterbox.style.display = 'none';
               isBusy = false;
             }, 500);
           }, 500);
@@ -402,6 +412,28 @@ barrelImage.onclick = refillFeeder;
             resetAfterFeed();
           }, 3000);
     
+}
+
+function goToLitterbox() {
+  if (isBusy) return;
+  isBusy = true;
+
+  petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro_left.png';
+  backgroundX = 0;
+  container.style.backgroundPositionX = backgroundX + '%';
+  const litterbox = document.getElementById('litterbox');
+  litterbox.style.display = 'inline';
+  litterbox.style.left = '-20%';
+  setTimeout(() => {
+    litterbox.style.transition = 'left 0.5s ease';
+    litterbox.style.left = 'calc(0% + 180px)';
+    setTimeout(() => {
+      petImage.src = 'https://abblake89.github.io/ferro-pets/assets/Ferro.png';
+      foodBowl.style.display = 'none';
+      feeder.style.display = 'none';
+      isBusy = false;
+    }, 1000);
+  }, 50);
 }
 
 </script>
