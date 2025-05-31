@@ -166,6 +166,7 @@
     <p>Happiness: <span id="happiness">100</span></p>
     <p>Hunger: <span id="hunger">0</span></p>
     <p>Ferro Size: <span id="ferroSizeDisplay">25</span>%</p>
+	<p>Image: <span id="ferroImage">Ferro.png</span></p>
   </div>
   <div class="buttons" id="buttonControls">
     <button onclick="feedPet()" aria-label="Feed Ferro">🍕 Feed</button>
@@ -184,6 +185,7 @@
     const happinessEl = document.getElementById('happiness');
     const hungerEl = document.getElementById('hunger');
     const ferroSizeDisplay = document.getElementById('ferroSizeDisplay');
+	const ferroImage = document.getElementById('ferroImage');
     const startButton = document.getElementById('startButton');
     const stats = document.getElementById('stats');
     const buttonControls = document.getElementById('buttonControls');
@@ -223,6 +225,7 @@
       happinessEl.textContent = happiness;
       hungerEl.textContent = hunger;
       ferroSizeDisplay.textContent = ferroSize;
+	  
     }
 
     function startGame() {
@@ -242,9 +245,10 @@
 		
 		if (ferroColor === 'gold') fileName += 'Gold';
 		
-		if (state) fileName += `_${state}`;
+		if (state) fileName += `${state}`;
   
 		petImage.src = `${base}${fileName}.png`;
+		ferroImage.textContent = `${base}${fileName}.png`;
 	}
 
     function blink() {
@@ -422,10 +426,7 @@
           for (const record of event.message.records) {
             if (record.recordType === 'text') {
               const text = decoder.decode(record.data);
-              if (text.trim() === 'ferro_food') {
-                feedPet();
-              }
-			  else if (text === 'FerroBarrel') {
+			  if (text.trim() === 'FerroBarrel') {
 				const ferroLeft = petImage.offsetLeft;
 				const barrelRight = ferroLeft + 50;
 				barrelImage.style.right = `${barrelRight}px`;
