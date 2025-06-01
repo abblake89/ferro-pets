@@ -444,6 +444,7 @@
             if (record.recordType === 'text') {
               const text = decoder.decode(record.data);
 			  if (text.trim() === 'FerroBarrel') {
+				ferroColor = ferroColor;
 				const ferroLeft = petImage.offsetLeft;
 				const barrelRight = ferroLeft + 50;
 				barrelImage.style.right = `${barrelRight}px`;
