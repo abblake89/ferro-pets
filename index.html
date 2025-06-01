@@ -363,8 +363,9 @@
         }
 
         
-
+		setTimeout(() => {
         chewCycle();
+		}, 500);
       }, 50);
     }
 
@@ -558,7 +559,7 @@ function goToLitterbox() {
           isBusy = false;
         }, 500);
       }, 2000);
-    }, 2000); //length of delay after Ferro gets to litterbox before shaking
+    }, 1000); //length of delay after Ferro gets to litterbox before shaking
   }, 50); //length of delay before litterbox starts moving onto the screen
 }
 
