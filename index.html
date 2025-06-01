@@ -89,8 +89,14 @@
       display: none;
     }
 	
-
-
+	
+	#partyHat {
+      position: absolute;
+      width: 10%;
+      height: auto;
+      display: none;
+      z-index: 2;
+    }
     
 
     #feederMachine {
@@ -151,6 +157,7 @@
 <body>
   <div class="container">
 	<img id="litterbox" src="https://abblake89.github.io/ferro-pets/assets/Litterbox.png" alt="Litterbox" style="position: absolute; left: 0; bottom: 65px; width: 20%; height: auto; display: none;" />
+	<img id="partyHat" src="https://abblake89.github.io/ferro-pets/assets/PartyHat.png" alt="Party Hat" />
     <img id="petImage" src="https://abblake89.github.io/ferro-pets/assets/Ferro.png" alt="Ferro, your magnetic pet" role="button" tabindex="0" />
     <img id="foodBowl" src="https://abblake89.github.io/ferro-pets/assets/FoodBowl.png" alt="Food Bowl" />
     <img id="foodBowl66" src="https://abblake89.github.io/ferro-pets/assets/FoodBowl66.png" alt="Food Bowl 66" />
@@ -242,6 +249,32 @@
       ferroSizeDisplay.textContent = ferroSize;
 	  
     }
+	
+	const partyHat = document.getElementById('partyHat');
+
+    function updateHatPosition() {
+      const petRect = petImage.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const offsetX = petRect.left - containerRect.left;
+      const offsetY = petRect.top - containerRect.top;
+
+      partyHat.style.left = `${offsetX + petImage.offsetWidth / 2 - partyHat.offsetWidth / 2}px`;
+      partyHat.style.top = `${offsetY - partyHat.offsetHeight + 10}px`;
+    }
+	
+	
+	const originalUpdateImage = updateFerroImage;
+    updateFerroImage = function(state = '') {
+      originalUpdateImage(state);
+      if (partyHat.style.display !== 'none') {
+        setTimeout(updateHatPosition, 50);
+      }
+	  }
+	
+	
+	
+	
+	
 
     function startGame() {
   const ferroLeft = petImage.offsetLeft;
@@ -451,14 +484,18 @@
 				barrelImage.style.display = 'inline';
                 barrelImage.onclick = refillFeeder;
 			  }
-			  else if (text === 'GoldFerro') {
+			  if (text === 'GoldFerro') {
 				ferroColor = 'gold';
 				updateFerroImage();
 			  }
-			  else if (text === 'Ferro') {
+			  if (text === 'Ferro') {
 				ferroColor = 'grey';
 				updateFerroImage();
 			  }
+			  if (text === 'PartyHat') {
+                    partyHat.style.display = 'inline';
+                    updateHatPosition();
+                  }
 				
             }
           }
