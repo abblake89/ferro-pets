@@ -245,6 +245,7 @@
 		
 		if (ferroColor === 'gold') fileName += 'Gold';
 		
+		
 		if (state) fileName += `${state}`;
   
 		petImage.src = `${base}${fileName}.png`;
@@ -435,6 +436,10 @@
 			  }
 			  else if (text === 'GoldFerro') {
 				ferroColor = 'gold';
+				updateFerroImage();
+			  }
+			  else if (text === 'Ferro') {
+				ferroColor = 'grey';
 				updateFerroImage();
 			  }
 				
